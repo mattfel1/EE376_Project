@@ -8,8 +8,7 @@ from matplotlib import cm as CM
 import scipy.interpolate
 
 # Sweeping parameters
-# pstep = 0.00625
-pstep = 0.0025
+pstep = 0.00625
 
 n_rec = 2 # Number of receptors
 n = n_rec + 1 # Number of states
@@ -72,18 +71,17 @@ for dp in np.arange(0,numpoints):
 	I[dp] = IXY(A,Z)
 
 maxp = [I.argmax()/dim, I.argmax()%dim]
-print "Max MI of %f at (%f, %f)" % (I.max(), pstep*maxp[0], pstep*maxp[1])
 
-x,y = np.meshgrid(p_ranges[0], p_ranges[1])
-z=I.reshape(dim,dim)
+if (n_rec == 2):	
+	print "Max MI is %f at (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
 
-plt.imshow(z.T, cmap='hot', interpolation='nearest', origin='lower')
-plt.show()
+	x,y = np.meshgrid(p_ranges[0], p_ranges[1])
+	z=I.reshape(dim,dim)
 
-x = x.ravel()
-y = y.ravel()
-z = z.ravel()
-
+	plt.imshow(z.T, cmap='hot', interpolation='nearest', origin='lower')
+	plt.show()
+else:
+	print "Max MI is %f for %d receptors ( ~%f per receptor )" % (I.max(), n_rec, I.max()/n_rec)
 
 # # Greedy plotly way
 # data = [
