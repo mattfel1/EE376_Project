@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm as CM
 import scipy.interpolate
 
+withInteraction = 1 # 0 = first plot in paper, 1 = second plot in paper
+
 # Sweeping parameters
 pstep = 0.00625
 
@@ -35,13 +37,19 @@ def pi(k,A,Z):
 def PHI(k):
 	return (n_rec-k) * psi(p[k])
 
+def PHI2(k):
+	return psi(p[k])
+
 def psi(p):
 	return phi(p*aH+(1-p)*aL) - (p*phi(aH) + (1-p)*phi(aL))
 
 def IXY(A,Z):
 	I = 0
 	for k in range(0,n_rec):
-		I = I + pi(k,A,Z) * PHI(k)
+		if (withInteraction == 0):
+			I = I + pi(k,A,Z) * PHI(k)
+		else:
+			I = I + pi(k,A,Z) * PHI2(k)			
 	if p.sum() > 1:
 		return 0
 	else:
@@ -64,7 +72,11 @@ for dp in np.arange(0,numpoints):
 		prod = 1
 		for ii in range(0,i):
 			prod = prod * a[ii]
-		A[i] = nCk(n_rec,i)*B**(n_rec-i)*prod
+		if (withInteraction == 0):
+			A[i] = nCk(n_rec,i)*B**(n_rec-i)*prod
+		else:
+			A[i] = B**(n_rec-i)*prod
+
 	Z = A.sum()
 
 	# Copmute MI for this point
@@ -95,3 +107,5 @@ else:
 #     )
 # ]
 # py.iplot(data, filename='basic-heatmap')
+
+
