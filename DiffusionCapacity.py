@@ -5,6 +5,7 @@ from fractions import Fraction
 # import plotly.graph_objs as go
 import matplotlib.pyplot as plt
 from matplotlib import cm as CM
+from matplotlib.pyplot import plot, draw, show
 import scipy.interpolate
 from textwrap import wrap
 
@@ -59,15 +60,20 @@ for d in range(0,2):
 					break
 
 
+f = plt.figure(1)
+plt.plot(t[0:(int)(10/step)],gxt[0:(int)(10/step)])
+plt.title("Transfer Function of Diffusion Channel")
+# f.show()
 
-# plt.plot(t[0:(int)(10/step)],gxt[0:(int)(10/step)])
-# plt.title("Transfer Function of Diffusion Channel")
-# plt.show()
-
+g = plt.figure(2)
 plt.plot(powers, xfer_time[0,:])
 plt.title("Transition time for 01 vs power")
-plt.show()
+# g.show()
 
+h = plt.figure(3)
 plt.plot(powers, xfer_time[1,:])
 plt.title("Transition time for 10 vs power")
-plt.show()
+# h.show()
+
+# Wait
+show()
