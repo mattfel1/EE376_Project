@@ -1,19 +1,21 @@
 import numpy as np
 from operator import mul    # or mul=lambda x,y:x*y
 from fractions import Fraction
-import plotly.plotly as py
-import plotly.graph_objs as go
+# import plotly.plotly as py
+# import plotly.graph_objs as go
 import matplotlib.pyplot as plt
 from matplotlib import cm as CM
 import scipy.interpolate
 from textwrap import wrap
 
-withInteraction = 1 # 0 = first plot in paper, 1 = second plot in paper
+## Paper: https://arxiv.org/pdf/1604.03508.pdf
+
+withInteraction = 0 # 0 = first plot in paper, 1 = second plot in paper
 
 # Sweeping parameters
-pstep = 0.00625
+pstep = 0.1
 
-n_rec = 2 # Number of receptors
+n_rec = 5 # Nmuber of receptors
 n = n_rec + 1 # Number of states
 aH = 10 # Rate constant for U -> B in high concentration
 aL = 1 # Rate constant for U -> B in low concentration
@@ -86,7 +88,7 @@ for dp in np.arange(0,numpoints):
 maxp = [I.argmax()/dim, I.argmax()%dim]
 
 if (n_rec == 2):	
-	if (withInteraction == 0)
+	if (withInteraction == 0):
 		summary = "W/O Interaction: Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
 	else:
 		summary = "With Interaction: Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
