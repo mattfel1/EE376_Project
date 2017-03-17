@@ -11,7 +11,7 @@ from textwrap import wrap
 
 def getW(T01, T10):
 	wstep = 0.01
-	for w in np.arange(wstep,1.5,wstep):
+	for w in np.arange(wstep,10,wstep):
 		last_pt = (w-wstep)**(T01 + T10) - 2*(w-wstep)**(T01 + T10 - 1) + (w-wstep)**(T01 + T10 - 2)
 		this_pt = w**(T01 + T10) - 2*w**(T01 + T10 - 1) + w**(T01 + T10 - 2)
 		if (last_pt <= 1 and this_pt >= 1):
@@ -27,9 +27,9 @@ print "Generating Transfer Function..."
 D = .282 # Water = 0.282
 R = 1
 pi = np.pi
-x = 1
-step = 0.01
-t = np.arange(.01,100,step)
+x = 0.5
+step = 0.005
+t = np.arange(.0001,100,step)
 gxt = np.zeros(t.size)
 for i in range(0, t.size):
 	gxt[i] = 1/(4*pi*D*t[i]) * np.exp(-x**2/(4*D*t[i])) 
@@ -39,7 +39,7 @@ print "Transfer Function Generated!"
 print "Generating Transition Times..."
 # Setup sweep params
 directions = [01, 10]
-powers = np.arange(.4,8,.1)
+powers = np.arange(.2,8,.1)
 start_time = np.zeros(powers.size)
 xfer_time = np.zeros((2, powers.size)) + t[t.size-1]
 for d in range(0,2):

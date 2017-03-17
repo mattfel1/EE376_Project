@@ -10,12 +10,13 @@ from textwrap import wrap
 
 ## Paper: https://arxiv.org/pdf/1604.03508.pdf
 
-withInteraction = 0 # 0 = first plot in paper, 1 = second plot in paper
+withInteraction = 1 # 0 = first plot in paper, 1 = second plot in paper
+show45 = True
 
 # Sweeping parameters
-pstep = 0.1
+pstep = 1.0/(2**8)
 
-n_rec = 5 # Nmuber of receptors
+n_rec = 2 # Nmuber of receptors
 n = n_rec + 1 # Number of states
 aH = 10 # Rate constant for U -> B in high concentration
 aL = 1 # Rate constant for U -> B in low concentration
@@ -57,6 +58,7 @@ def IXY(A,Z):
 		return 0
 	else:
 		return I
+	# return I
 
 
 dim = int(1/pstep)
@@ -89,16 +91,27 @@ maxp = [I.argmax()/dim, I.argmax()%dim]
 
 if (n_rec == 2):	
 	if (withInteraction == 0):
-		summary = "W/O Interaction: Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
+		summary = "Mutual Information W/O Interaction                                      Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
 	else:
-		summary = "With Interaction: Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
+		summary = "Mutual Information With Interaction                                      Max MI = %f @ (%f, %f) for %d receptors ( ~%f per receptor )" % (I.max(), pstep*maxp[0], pstep*maxp[1], n_rec, I.max()/n_rec)
 
 	print summary
 
 	x,y = np.meshgrid(p_ranges[0], p_ranges[1])
 	z=I.reshape(dim,dim)
 
-	heatmap = plt.imshow(z.T, cmap='hot', interpolation='nearest', origin='lower')
+	if show45:
+		for i in range(0,dim):
+			for j in range(0,dim):
+				if (i == j):
+					z[i,j] = 0
+				dist_from_max = np.sqrt((i - maxp[0])**2 + (j - maxp[1])**2)
+				radius = 7
+				if (dist_from_max > radius - 1 and dist_from_max < radius + 1):
+					z[i,j] = I.max()/4
+
+
+	heatmap = plt.imshow(z, cmap='hot', interpolation='nearest', origin='lower', extent=[0, 1, 0, 1])
 	ax = plt.gca
 	cbar = plt.colorbar(heatmap)
 	plt.title("\n".join(wrap(summary, 60)))
