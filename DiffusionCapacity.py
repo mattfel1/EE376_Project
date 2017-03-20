@@ -27,7 +27,7 @@ print "Generating Transfer Function..."
 D = .282 # Water = 0.282
 R = 1
 pi = np.pi
-x = 0.5
+x = 1
 step = 0.005
 t = np.arange(.0001,100,step)
 gxt = np.zeros(t.size)

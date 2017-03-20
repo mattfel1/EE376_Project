@@ -7,10 +7,16 @@ import matplotlib.pyplot as plt
 from matplotlib import cm as CM
 import scipy.interpolate
 from textwrap import wrap
-
+import matplotlib.pylab as pylab
+params = {'legend.fontsize': 'x-large',
+         'axes.labelsize': 'x-large',
+         'axes.titlesize':'x-large',
+         'xtick.labelsize':'x-large',
+         'ytick.labelsize':'x-large'}
+pylab.rcParams.update(params)
 ## Paper: https://arxiv.org/pdf/1604.03508.pdf
 
-withInteraction = 1 # 0 = first plot in paper, 1 = second plot in paper
+withInteraction = 0# 0 = first plot in paper, 1 = second plot in paper
 show45 = True
 
 # Sweeping parameters
@@ -114,9 +120,9 @@ if (n_rec == 2):
 	heatmap = plt.imshow(z, cmap='hot', interpolation='nearest', origin='lower', extent=[0, 1, 0, 1])
 	ax = plt.gca
 	cbar = plt.colorbar(heatmap)
-	plt.title("\n".join(wrap(summary, 60)))
-	plt.xlabel('p0')
-	plt.ylabel('p1')
+	plt.title("\n".join(wrap(summary, 60)), fontsize=25)
+	plt.xlabel('p0', fontsize=20)
+	plt.ylabel('p1', fontsize=20)
 	plt.show()
 
 else:
