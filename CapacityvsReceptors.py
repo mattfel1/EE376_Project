@@ -18,7 +18,7 @@ pylab.rcParams.update(params)
 
 numreceptors = np.arange(2,8,1)
 C = np.zeros(numreceptors.size)
-withInteraction = 0# 0 = first plot in paper, 1 = second plot in paper
+withInteraction = 1# 0 = first plot in paper, 1 = second plot in paper
 show45 = True
 for n_rec_id in range(0, numreceptors.size):
 
@@ -107,9 +107,18 @@ plt.title("Max Capacity vs Number of Receptors (Interaction = %d)\n" % withInter
 plt.xlabel("Number of receptors")
 plt.ylabel("Capacity (nats)")
 
-
+print C
+# Without inter
 # e = plt.figure(1)
 # C = [3.573502, 5.348241 , 7.080807 , 8.740483 , 10.303278, 12.063548]
+# plt.plot(numreceptors, C)
+# plt.title("Max Capacity vs Number of Receptors (Interaction = %d)\n" % withInteraction)
+# plt.xlabel("Number of receptors")
+# plt.ylabel("Capacity (nats)")
+
+# With inter
+# e = plt.figure(1)
+# C =  [2.095334, 2.354862, 2.454205, 2.484172, 2.514171, 2.524171]
 # plt.plot(numreceptors, C)
 # plt.title("Max Capacity vs Number of Receptors (Interaction = %d)\n" % withInteraction)
 # plt.xlabel("Number of receptors")

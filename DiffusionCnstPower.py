@@ -18,8 +18,8 @@ params = {'legend.fontsize': 'x-large',
 pylab.rcParams.update(params)
 
 def getW(T01, T10):
-	wstep = 0.001
-	for w in np.arange(wstep,10,wstep):
+	wstep = 0.000005
+	for w in np.arange(wstep,8,wstep):
 		last_pt = (w-wstep)**(T01 + T10) - 2*(w-wstep)**(T01 + T10 - 1) + (w-wstep)**(T01 + T10 - 2)
 		this_pt = w**(T01 + T10) - 2*w**(T01 + T10 - 1) + w**(T01 + T10 - 2)
 		if (last_pt <= 1 and this_pt >= 1):
@@ -32,23 +32,22 @@ def getC(w):
 ## Paper: https://arxiv.org/pdf/1105.1969.pdf
 # Setup channel params
 print "Generating Transfer Function..."
-D = .282 # Water = 0.282
-R = 1
-F = 1.3
-xx = np.arange(0.1, 10, .1)
+D = 30 # Water = 0.282
+S = .000000001
+F = 0.000000075
+step = 0.005
+t = np.arange(.0001,20,step)
+
+xx = np.arange(.4, 10, .35)
 pi = np.pi
 C = np.zeros(xx.size)
 for x_id in range(0, xx.size):
 	x = xx[x_id]
-	step = 0.005
-	t = np.arange(.0001,100,step)
+	print x
 	gxt = np.zeros(t.size)
 	for i in range(0, t.size):
 		gxt[i] = 1/(4*pi*D*t[i]) * np.exp(-x**2/(4*D*t[i])) 
 
-	print "Transfer Function Generated!"
-
-	print "Generating Transition Times..."
 	# Setup sweep params
 	directions = [01, 10]
 	power = F
@@ -56,7 +55,6 @@ for x_id in range(0, xx.size):
 	xfer_time = np.zeros(2) + t[t.size-1]
 	for d in range(0,2):
 		transition = directions[d]
-		S = 20
 
 		# Configure step function
 		T_change = start_time
@@ -91,16 +89,14 @@ for x_id in range(0, xx.size):
 			series = "T_01"
 		else:
 			series = "T_10"
-		print "Generated series %s!" % (series)
 
-	print "Computing Capacity..."
 	# Find capacity for T01 T10
 	W = getW(xfer_time[0], xfer_time[1])
 	C[x_id] = getC(W)
-	print "Capacity Computed!"
+	print "Capacity Computed ( %f ) !" % C[x_id]
 
 
-
+print C
 e = plt.figure(1)
 plt.plot(xx, C)
 plt.title("Capacity vs distance (Power = %f (units))\n" % F)

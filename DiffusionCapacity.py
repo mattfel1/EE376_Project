@@ -10,8 +10,8 @@ import scipy.interpolate
 from textwrap import wrap
 
 def getW(T01, T10):
-	wstep = 0.01
-	for w in np.arange(wstep,10,wstep):
+	wstep = 0.0001
+	for w in np.arange(wstep,20,wstep):
 		last_pt = (w-wstep)**(T01 + T10) - 2*(w-wstep)**(T01 + T10 - 1) + (w-wstep)**(T01 + T10 - 2)
 		this_pt = w**(T01 + T10) - 2*w**(T01 + T10 - 1) + w**(T01 + T10 - 2)
 		if (last_pt <= 1 and this_pt >= 1):
@@ -24,12 +24,15 @@ def getC(w):
 ## Paper: https://arxiv.org/pdf/1105.1969.pdf
 # Setup channel params
 print "Generating Transfer Function..."
-D = .282 # Water = 0.282
-R = 1
+D = 30 # Water = 0.282
+x = 2
+S = .000000001
+powers = np.arange(.000000008,.0000002,.00000001)
+step = 0.05
+t = np.arange(.0001,1000,step)
+
+
 pi = np.pi
-x = 1
-step = 0.005
-t = np.arange(.0001,100,step)
 gxt = np.zeros(t.size)
 for i in range(0, t.size):
 	gxt[i] = 1/(4*pi*D*t[i]) * np.exp(-x**2/(4*D*t[i])) 
@@ -39,12 +42,10 @@ print "Transfer Function Generated!"
 print "Generating Transition Times..."
 # Setup sweep params
 directions = [01, 10]
-powers = np.arange(.2,8,.1)
 start_time = np.zeros(powers.size)
 xfer_time = np.zeros((2, powers.size)) + t[t.size-1]
 for d in range(0,2):
 	transition = directions[d]
-	S = 20
 
 	for i in range(0,powers.size):
 		T_change = start_time[i]
